@@ -20,6 +20,14 @@ public class Grid {
         }
     }
 
+    public void addAnimal(Animal animal, int x, int y) {
+        cells[x][y].animals.add(animal);
+    }
+
+    public void addPlants(Plant plant, int x, int y) {
+        cells[x][y].plants.add(plant);
+    }
+
     public ArrayList<Cell> getCellNeighbors(int x, int y) {
         ArrayList<Cell> neighbors = new ArrayList<>();
         for(int i = Math.max(x-1, 0); i < Math.min(x+2, this.x) ; i++) {
