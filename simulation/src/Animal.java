@@ -11,4 +11,8 @@ public class Animal {
     public double getGene(String geneName) {
         return genome.geneticCode.get(geneName);
     }
+
+    public void getHungry(double hunger) {
+        satiety -= hunger;
+    }
 }

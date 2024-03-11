@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Cell {
-    ArrayList<Animal> animals = new ArrayList<>();
-    ArrayList<Plant> plants = new ArrayList<>();
+    LinkedList<Animal> animals = new LinkedList<>();
+    LinkedList<Plant> plants = new LinkedList<>();
     int x, y;
     Grid grid;
 
