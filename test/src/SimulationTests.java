@@ -15,28 +15,28 @@ public class SimulationTests {
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(30);
 
-        // Simulation
         for (int i = 1; i < 1000; i++) {
-            System.out.println("Iteration:" + i);
-            printGridInConsole(simulationManager);
-            var finalGenomes = simulationManager.getGenomes();
-            System.out.println("Number of animals: "+finalGenomes.size());
-            System.out.println("Number of plants: "+simulationManager.getPlants().size());
-            simulationManager.iterate(0.01);
+            // Simulation
+            simulationManager.iterate();
             simulationManager.addPlants(2);
+
+            // Analysis
+            System.out.println("----- Iteration:" + i + " ------");
+            printGridInConsole(simulationManager);
+            var newGenomes = simulationManager.getGenomes();
+            System.out.println("Number of animals: "+newGenomes.size());
+            System.out.println("Number of plants: "+simulationManager.getPlants().size());
+            System.out.println("Average digestion: "+ averageDigestion(newGenomes));
         }
+    }
 
-
-        // Analysis
-        var finalGenomes = simulationManager.getGenomes();
+    static double averageDigestion(ArrayList<Genome> genomes) {
         double avgDigestion = 0;
-        for(var genome : finalGenomes) {
+        for(var genome : genomes) {
             avgDigestion += genome.geneticCode.get("digestion");
         }
-        avgDigestion /= finalGenomes.size();
-        System.out.println("Number of animals: "+finalGenomes.size());
-        System.out.println("Number of plants: "+simulationManager.getPlants().size());
-        System.out.println("Average digestion: "+avgDigestion);
+        avgDigestion /= genomes.size();
+        return avgDigestion;
     }
 
     static void printGridInConsole(SimulationManager simulationManager) {

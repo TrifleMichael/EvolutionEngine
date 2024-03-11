@@ -23,7 +23,7 @@ public class SimulationManager {
         }
     }
 
-    public void iterate(double hungerRatio) {
+    public void iterate() {
         for(int i = 0; i < grid.x; i++) {
             for(int j = 0; j < grid.y; j++) {
                 Cell cell = grid.cells[i][j];
@@ -42,7 +42,7 @@ public class SimulationManager {
                 }
 
                 // Starving
-                cell.animals.forEach(animal -> animal.getHungry(hungerRatio));
+                cell.animals.forEach(animal -> animal.getHungry(Settings.satietyLostPerIteration));
                 int deleted = 0;
                 for(int k = 0; k < cell.animals.size()-deleted; k++) { // Hack na to że nie da się sensownie iterować i usuwać elementów z collection
                     if (cell.animals.get(k).satiety < 0) {
@@ -59,9 +59,9 @@ public class SimulationManager {
                 for (int k = 1; k < cell.animals.size(); k += 2) {
                     Animal animal1 = cell.animals.get(k-1);
                     Animal animal2 = cell.animals.get(k);
-                    if (animal1.satiety > 0.5 && animal2.satiety > 0.5) { // TODO: Hardcoded but should not be
-                        animal1.satiety -= 0.1; // TODO Also remove hard-code
-                        animal2.satiety -= 0.1;
+                    if (animal1.satiety > Settings.satietyRequiredForBirth && animal2.satiety > Settings.satietyRequiredForBirth) { // TODO: Hardcoded but should not be
+                        animal1.satiety -= Settings.satietyLostOnBirth; // TODO Also remove hard-code
+                        animal2.satiety -= Settings.satietyLostOnBirth;
                         Genome newGenome = animal1.genome.combineGenomes(animal2.genome);
                         cell.animals.add(new Animal(newGenome));
                     }
