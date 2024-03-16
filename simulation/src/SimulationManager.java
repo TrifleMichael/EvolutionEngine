@@ -1,50 +1,52 @@
 import java.util.*;
 import java.util.stream.Collectors;
-
 public class SimulationManager {
 
     Grid grid;
 
     public SimulationManager(int grid_x, int grid_y) {
+
         grid = new Grid(grid_x, grid_y);
+
     }
+
 
     public void populateGrid(ArrayList<Genome> genomes) {
         Random random = new Random();
-        for(Genome genome : genomes) {
+        for (Genome genome : genomes) {
             grid.addAnimal(new Animal(genome), Math.abs(random.nextInt()) % grid.x, Math.abs(random.nextInt()) % grid.y);
         }
     }
 
     public void addPlants(int number) {
         Random random = new Random();
-        for(int i = 0; i < number; i++) {
+        for (int i = 0; i < number; i++) {
             grid.addPlants(new Plant(), Math.abs(random.nextInt()) % grid.x, Math.abs(random.nextInt()) % grid.y);
         }
     }
 
     public void iterate() {
-        for(int i = 0; i < grid.x; i++) {
-            for(int j = 0; j < grid.y; j++) {
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
                 Cell cell = grid.cells[i][j];
                 var neighbours = grid.getCellNeighbors(i, j);
                 // cell.animals.sort(Comparator.comparing((Animal a) -> (int)(Math.random() * 1000))); // Shuffle animals This throws an error after a longer time
                 // TODO Shuffle animals
 
                 // Eating
-                for(Animal animal : cell.animals) {
+                for (Animal animal : cell.animals) {
                     for (Plant plant : cell.plants) // Each animal tries to eat the plants, finishes after eating either 0 or 1
                         if (plant.bitterness < animal.getGene("digestion")) {
                             animal.satiety += plant.foodValue;
                             cell.plants.remove(plant); // TODO This may cause error due to iterating and removing at the same time
                             break;
-                    }
+                        }
                 }
 
                 // Starving
                 cell.animals.forEach(animal -> animal.getHungry(Settings.satietyLostPerIteration));
                 int deleted = 0;
-                for(int k = 0; k < cell.animals.size()-deleted; k++) { // Hack na to że nie da się sensownie iterować i usuwać elementów z collection
+                for (int k = 0; k < cell.animals.size() - deleted; k++) { // Hack na to że nie da się sensownie iterować i usuwać elementów z collection
                     if (cell.animals.get(k).satiety < 0) {
                         cell.animals.remove(k);
                         deleted++;
@@ -57,7 +59,7 @@ public class SimulationManager {
 
                 // Multiplying
                 for (int k = 1; k < cell.animals.size(); k += 2) {
-                    Animal animal1 = cell.animals.get(k-1);
+                    Animal animal1 = cell.animals.get(k - 1);
                     Animal animal2 = cell.animals.get(k);
                     if (animal1.satiety > Settings.satietyRequiredForBirth && animal2.satiety > Settings.satietyRequiredForBirth) { // TODO: Hardcoded but should not be
                         animal1.satiety -= Settings.satietyLostOnBirth; // TODO Also remove hard-code
@@ -68,8 +70,8 @@ public class SimulationManager {
                 }
 
                 // Moving
-                for(Animal animal : cell.animals) {
-                    Cell destination = neighbours.get((int)(Math.random() * neighbours.size()));
+                for (Animal animal : cell.animals) {
+                    Cell destination = neighbours.get((int) (Math.random() * neighbours.size()));
                     destination.animals.add(animal);
                 }
                 cell.animals.clear();
@@ -83,10 +85,10 @@ public class SimulationManager {
 
     public ArrayList<Genome> getGenomes() {
         ArrayList<Genome> genomes = new ArrayList<>();
-        for(int i = 0; i < grid.x; i++) {
-            for(int j = 0; j < grid.y; j++) {
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
                 Cell cell = getCell(i, j);
-                for(Animal animal : cell.animals) {
+                for (Animal animal : cell.animals) {
                     genomes.add(animal.genome);
                 }
             }
@@ -96,12 +98,13 @@ public class SimulationManager {
 
     public ArrayList<Plant> getPlants() {
         ArrayList<Plant> plants = new ArrayList<>();
-        for(int i = 0; i < grid.x; i++) {
-            for(int j = 0; j < grid.y; j++) {
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
                 Cell cell = getCell(i, j);
                 plants.addAll(cell.plants);
             }
         }
         return plants;
     }
+
 }

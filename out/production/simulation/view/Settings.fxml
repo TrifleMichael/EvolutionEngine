@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+spacing="10">
+
+    <stylesheets>
+        <URL value="@/css/settings.css"/>
+    </stylesheets>
+
+
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text > Board size</Text></VBox>
+
+        <TextField fx:id="boardSize" text="10"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text>Mutation Standard Deviation</Text></VBox>
+        <TextField fx:id="mutationStandardDeviation" text="0.02"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text>Satiety Lost Per Iteration</Text></VBox>
+        <TextField fx:id="satietyLostPerIteration" text="0.01"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"> <Text>Satiety Lost On Birth</Text></VBox>
+        <TextField fx:id="satietyLostOnBirth" text="0.2"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text>Satiety Required For Birth</Text></VBox>
+        <TextField fx:id="satietyRequiredForBirth" text="0.8"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text>Starting Satiety</Text></VBox>
+        <TextField fx:id="startingSatiety" text="1"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Button text="START" onAction="#handleStartClick"/>
+    </HBox>
+</VBox>
