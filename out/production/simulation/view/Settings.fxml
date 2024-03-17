@@ -18,8 +18,11 @@ spacing="10">
 
     <HBox alignment="CENTER">
         <VBox styleClass="textClass"><Text > Board size</Text></VBox>
-
         <TextField fx:id="boardSize" text="10"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <VBox styleClass="textClass"><Text >initial plants number</Text></VBox>
+        <TextField fx:id="initialPlantsNo" text="30"/>
     </HBox>
     <HBox alignment="CENTER">
         <VBox styleClass="textClass"><Text>Mutation Standard Deviation</Text></VBox>

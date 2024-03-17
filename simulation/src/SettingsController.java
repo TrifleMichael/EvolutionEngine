@@ -14,7 +14,13 @@ public class SettingsController {
     private Parent parent;
 
     @FXML
+    private TextField iterations;
+
+    @FXML
     private TextField boardSize;
+
+    @FXML
+    private TextField initialPlantsNo;
 
     @FXML
     private TextField mutationStandardDeviation;
@@ -48,11 +54,17 @@ public class SettingsController {
     }
     @FXML
     private void handleStartClick(ActionEvent event) throws Exception {
+        Settings.setIterations(Integer.parseInt(iterations.getText()));
+        Settings.setBoardSize(Integer.parseInt(boardSize.getText()));
+        Settings.setInitialPlantsNo(Integer.parseInt(initialPlantsNo.getText()));
         Settings.setMutationStandardDeviation(Double.parseDouble(mutationStandardDeviation.getText()));
         Settings.setSatietyLostPerIteration(Double.parseDouble(satietyLostPerIteration.getText()));
         Settings.setSatietyLostOnBirth(Double.parseDouble(satietyLostOnBirth.getText()));
         Settings.setSatietyRequiredForBirth(Double.parseDouble(satietyRequiredForBirth.getText()));
         Settings.setStartingSatiety(Double.parseDouble(startingSatiety.getText()));
+
         new BoardController().launchScene(stage);
     }
+
+
 }

@@ -6,10 +6,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       style="-fx-padding: 10"
 >
+    <stylesheets>
+        <URL value="@/css/board.css"/>
+    </stylesheets>
+
+    <HBox styleClass="simulationButtonsBox" alignment="CENTER" maxHeight="100" prefHeight="100">
+        <Button styleClass="simulationButton" fx:id="startButton" text="START" onAction="#handleStartClick"/>
+        <Button styleClass="simulationButton" fx:id="stopButton" text="STOP" onAction="#handleStopClick"/>
+        <Button styleClass="simulationButton" fx:id="stepButton" text="ONE STEP" onAction="#handleStepClick"/>
+        <Button styleClass="simulationButton" fx:id="endButton" text="END" onAction="#handleEndClick"/>
+    </HBox>
     <GridPane fx:id="boardGrid"/>
 
 </VBox>

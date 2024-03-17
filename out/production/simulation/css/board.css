@@ -1,0 +1,13 @@
+.simulationButtonsBox{
+    -fx-spacing: 10;
+    -fx-pref-width: 100%;
+    -fx-alignment:top_right;
+}
+.gridField{
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}
+
+.simulationButton{
+
+}

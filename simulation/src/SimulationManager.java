@@ -1,12 +1,15 @@
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+
 import java.util.*;
 import java.util.stream.Collectors;
 public class SimulationManager {
 
     Grid grid;
 
-    public SimulationManager(int grid_x, int grid_y) {
+    public SimulationManager(Grid grid) {
 
-        grid = new Grid(grid_x, grid_y);
+        this.grid = grid;
 
     }
 
