@@ -83,19 +83,31 @@ public class BoardController {
         boardGrid.getChildren().clear();
         for (int i = 0; i < Settings.boardSize; i++) {
             for (int j = 0; j < Settings.boardSize;  j++) {
-                HBox box = createField(grid.cells[j][i], i, j);
+                HBox box = createField(grid.cells[j][i]);
                 boardGrid.add(box, i, j);
             }
         }
     }
 
-    private HBox createField(Cell cell, int i, int j){
+    private HBox createField(Cell cell){
+        int plantColor = Math.max(255-cell.plants.size()*20,0);
         String cellAsString = cellToString(cell);
         Label label = new Label(cellAsString);
         HBox box = new HBox(label);
+        if(cell.plants.isEmpty())
+            box.setStyle("-fx-background-color: white;");
+        else
+            box.setStyle("-fx-background-color: rgb(0,"+plantColor+",0);");
         box.getStyleClass().add("gridField");
-        box.setPrefWidth((double) 900/(double) Settings.boardSize);
-        box.setPrefHeight((double) 700/(double) Settings.boardSize);
+        double boxWidth = (double) 900/(double) Settings.boardSize;
+        double boxHeight = (double) 700/(double) Settings.boardSize;
+        box.setPrefWidth(boxWidth);
+        box.setPrefHeight(boxHeight);
+        for (int i = 0; i <cell.animals.size() ; i++) {
+            HBox animal = new HBox();
+            animal.getStyleClass().add("animalBox");
+            box.getChildren().add(animal);
+        }
         return box;
 
     }
