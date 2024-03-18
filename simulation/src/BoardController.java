@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,6 +33,17 @@ public class BoardController {
     @FXML
     private Button endButton;
 
+    @FXML
+    private Text epochsNo;
+
+    @FXML
+    private Text animalsNo;
+
+    @FXML
+    private Text plantsNo;
+
+    @FXML
+    private Text avgDigestion;
 
 
     public BoardController() throws Exception{
@@ -40,7 +52,7 @@ public class BoardController {
         try {
             parent = (Parent) fxmlLoader.load();
             // set height and width here for this login scene
-            scene = new Scene(parent, 1000, 800);
+            scene = new Scene(parent, 1200, 800);
 
             simulation = new SimulationEngine(this);
 
@@ -60,10 +72,11 @@ public class BoardController {
             stage.show();
     }
 
-    public void hasChanges(SimulationManager simulationManager){
+    public void hasChanges(SimulationManager simulationManager, int step){
         Grid grid = simulationManager.grid;
-        ArrayList<Genome> genomes = simulationManager.getGenomes();
+
         drawGrid(grid);
+        printStats(step, simulationManager);
     }
 
     private void drawGrid(Grid grid){
@@ -85,6 +98,12 @@ public class BoardController {
         box.setPrefHeight((double) 700/(double) Settings.boardSize);
         return box;
 
+    }
+    private void printStats(int step, SimulationManager simulationManager){
+        epochsNo.setText(String.valueOf(step));
+        animalsNo.setText(String.valueOf(simulationManager.getGenomes().size()));
+        plantsNo.setText(String.valueOf(simulationManager.getPlants().size()));
+        avgDigestion.setText(String.valueOf(simulationManager.averageDigestion()));
     }
 
     static String cellToString(Cell cell) {

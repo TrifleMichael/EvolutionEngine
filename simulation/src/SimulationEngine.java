@@ -33,8 +33,8 @@ public class SimulationEngine implements Runnable{
         simulation();
     }
     private void simulation(){
-//        try {
-            Platform.runLater(() -> boardController.hasChanges(simulationManager));
+      try {
+            Platform.runLater(() -> boardController.hasChanges(simulationManager, step));
             for(;;) {
                 if (!isRunning&&!endSimulation)
                     continue;
@@ -45,21 +45,21 @@ public class SimulationEngine implements Runnable{
                 if(oneStepOnly) {
                     oneStepOnly = false;
                     isRunning = false;
-                    Platform.runLater(()->boardController.hasChanges(simulationManager));
+                    Platform.runLater(()->boardController.hasChanges(simulationManager, step));
                 }
                 if(step%10==0)
-                    Platform.runLater(() -> boardController.hasChanges(simulationManager));
-                if(step >= 10000)
+                    Platform.runLater(() -> boardController.hasChanges(simulationManager, step));
+                if(step >= 1000)
 
                 {
                     Platform.runLater(() -> {
-                        boardController.hasChanges(simulationManager);
+                        boardController.hasChanges(simulationManager, step);
                         boardController.stopSimulation();
                     });
                     break;
                 }
 
-//                sleep(500);
+                sleep(10);
             }
             for(;;) {
                 if(endSimulation)
@@ -68,15 +68,13 @@ public class SimulationEngine implements Runnable{
                     oneStepOnly = false;
                     simulationStep();
                     step+=1;
-                    Platform.runLater(() -> boardController.hasChanges(simulationManager));
-//                    refresh.setValue(0);
+                    Platform.runLater(() -> boardController.hasChanges(simulationManager, step));
                 }
             }
-//            refresh.setValue(0);
-            Platform.runLater(() -> boardController.hasChanges(simulationManager));
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+            Platform.runLater(() -> boardController.hasChanges(simulationManager, step));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     protected void initialize() {
         grid =new Grid(Settings.boardSize, Settings.boardSize);
@@ -94,11 +92,10 @@ public class SimulationEngine implements Runnable{
         simulationManager.addPlants(2);
 
         System.out.println("----- Iteration:" + step + " ------");
-        printGridInConsole(simulationManager);
-        var newGenomes = simulationManager.getGenomes();
-        System.out.println("Number of animals: "+newGenomes.size());
+        simulationManager.printGridInConsole();
+        System.out.println("Number of animals: "+simulationManager.getGenomes().size());
         System.out.println("Number of plants: "+simulationManager.getPlants().size());
-        System.out.println("Average digestion: "+ averageDigestion(newGenomes));
+        System.out.println("Average digestion: "+ simulationManager.averageDigestion());
     }
 
     public void start(){
@@ -115,29 +112,5 @@ public class SimulationEngine implements Runnable{
         endSimulation = true;
     }
 
-
-
-    static double averageDigestion(ArrayList<Genome> genomes) {
-        double avgDigestion = 0;
-        for(var genome : genomes) {
-            avgDigestion += genome.geneticCode.get("digestion");
-        }
-        avgDigestion /= genomes.size();
-        return avgDigestion;
-    }
-
-    static void printGridInConsole(SimulationManager simulationManager) {
-        for(int i = 0; i < simulationManager.grid.x; i++) {
-            for(int j = 0; j < simulationManager.grid.y; j++) {
-                String cellAsString = cellToString(simulationManager.getCell(i, j));
-                System.out.print("|" + cellAsString + "|\t");
-            }
-            System.out.println();
-        }
-    }
-
-    static String cellToString(Cell cell) {
-        return cell.animals.size() + " " + cell.plants.size();
-    }
 
 }

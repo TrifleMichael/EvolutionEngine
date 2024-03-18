@@ -8,6 +8,13 @@
     -fx-border-width: 1;
 }
 
-.simulationButton{
+.content{
+    -fx-pref-width: 100%;
+}
 
+.statComponent{
+    -fx-spacing: 5;
+}
+.statsContainer{
+    -fx-padding: 10;
 }

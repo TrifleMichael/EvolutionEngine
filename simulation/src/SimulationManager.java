@@ -110,4 +110,28 @@ public class SimulationManager {
         return plants;
     }
 
+    public double averageDigestion() {
+        double avgDigestion = 0;
+        ArrayList<Genome> genomes = getGenomes();
+        for(var genome : genomes) {
+            avgDigestion += genome.geneticCode.get("digestion");
+        }
+        avgDigestion /= genomes.size();
+        return avgDigestion;
+    }
+
+    public void printGridInConsole() {
+        for(int i = 0; i < grid.x; i++) {
+            for(int j = 0; j < grid.y; j++) {
+                String cellAsString = cellToString(getCell(i, j));
+                System.out.print("|" + cellAsString + "|\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public String cellToString(Cell cell) {
+        return cell.animals.size() + " " + cell.plants.size();
+    }
+
 }
