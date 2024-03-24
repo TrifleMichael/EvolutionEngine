@@ -19,8 +19,6 @@ public class Settings {
 
     static public double startingSatiety = 1;
 
-    static ArrayList<String> animalStats = new ArrayList<>(List.of("strength", "sight", "camouflage", "speed", "digestion")); // Hardcoded in other places
-
     public static void setIterations(int iterations) {
         Settings.iterations = iterations;
     }

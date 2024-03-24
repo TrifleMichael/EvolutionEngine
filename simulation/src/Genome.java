@@ -3,17 +3,18 @@ import java.util.Random;
 
 public class Genome {
 
-    public HashMap<String, Double> geneticCode = new HashMap<>();
+    public HashMap<GenomCode, Double> geneticCode = new HashMap<>();
 
-    public Genome(double strength, double sight, double camouflage, double speed, double digestion) {
-        geneticCode.put("strength", strength);
-        geneticCode.put("sight", sight);
-        geneticCode.put("camouflage", camouflage);
-        geneticCode.put("speed", speed);
-        geneticCode.put("digestion", digestion);
+    public Genome(double strength, double sight, double camouflage, double speed, double digestion, double aggression) {
+        geneticCode.put(GenomCode.STRENGTH, strength);
+        geneticCode.put(GenomCode.SIGHT, sight);
+        geneticCode.put(GenomCode.CAMOUFLAGE, camouflage);
+        geneticCode.put(GenomCode.SPEED, speed);
+        geneticCode.put(GenomCode.DIGESTION, digestion);
+        geneticCode.put(GenomCode.AGGRESSION, aggression);
     }
 
-    public Genome(HashMap<String, Double> geneticCode) {
+    public Genome(HashMap<GenomCode, Double> geneticCode) {
         this.geneticCode = geneticCode;
     }
 
@@ -24,7 +25,7 @@ public class Genome {
     private void normalizeGenome() {
         double sum = getGenomeSum();
         for (var entry : geneticCode.entrySet()) {
-            String key = entry.getKey();
+            GenomCode key = entry.getKey();
             double value = entry.getValue();
             geneticCode.put(key, value/sum);
         }
@@ -34,7 +35,7 @@ public class Genome {
         Genome newGenome = new Genome(geneticCode); // Clone
         Random random = new Random();
         for (var entry : newGenome.geneticCode.entrySet()) { // Mutate
-            String key = entry.getKey();
+            GenomCode key = entry.getKey();
             double value = entry.getValue();
             value += random.nextGaussian() * Settings.mutationStandardDeviation;
             value = value < 0 ? 0 : value; // Not less than 0
@@ -49,8 +50,8 @@ public class Genome {
         Genome g1 = mutateGeneticCode();
         Genome g2 = other.mutateGeneticCode();
         // Average out parent DNA
-        HashMap<String, Double> newGeneticCode = new HashMap<>();
-        for (String stat : Settings.animalStats) {
+        HashMap<GenomCode, Double> newGeneticCode = new HashMap<>();
+        for (GenomCode stat : GenomCode.class.getEnumConstants()) {
             newGeneticCode.put(stat, (g1.geneticCode.get(stat) + g2.geneticCode.get(stat)) / 2);
         }
         // Normalize
@@ -61,7 +62,7 @@ public class Genome {
 
     public void printGenome() {
         for (var entry : geneticCode.entrySet()) {
-            String key = entry.getKey();
+            GenomCode key = entry.getKey();
             double value = entry.getValue();
             System.out.println(key + " - " + value);
         }

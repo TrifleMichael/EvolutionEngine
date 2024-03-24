@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 public class SimulationManager {
 
     Grid grid;
+    Random randomGenerator = new Random();
+    Interaction interaction = new Interaction();
 
     public SimulationManager(Grid grid) {
 
@@ -34,23 +36,26 @@ public class SimulationManager {
                 Cell cell = grid.cells[i][j];
                 var neighbours = grid.getCellNeighbors(i, j);
                 // cell.animals.sort(Comparator.comparing((Animal a) -> (int)(Math.random() * 1000))); // Shuffle animals This throws an error after a longer time
-                // TODO Shuffle animals
-
+                Collections.shuffle(cell.animals);
                 // Eating
                 for (Animal animal : cell.animals) {
-                    for (Plant plant : cell.plants) // Each animal tries to eat the plants, finishes after eating either 0 or 1
-                        if (plant.bitterness < animal.getGene("digestion")) {
+                    ListIterator<Plant> plantIt = cell.plants.listIterator();
+                    while(plantIt.hasNext()){
+                        Plant plant = plantIt.next();
+                        if (plant.bitterness < animal.getGene(GenomCode.DIGESTION)) {
                             animal.satiety += plant.foodValue;
-                            cell.plants.remove(plant); // TODO This may cause error due to iterating and removing at the same time
+                            plantIt.remove();
                             break;
                         }
+                    }
+                   // Each animal tries to eat the plants, finishes after eating either 0 or 1
                 }
 
                 // Starving
                 cell.animals.forEach(animal -> animal.getHungry(Settings.satietyLostPerIteration));
                 int deleted = 0;
                 for (int k = 0; k < cell.animals.size() - deleted; k++) { // Hack na to że nie da się sensownie iterować i usuwać elementów z collection
-                    if (cell.animals.get(k).satiety < 0) {
+                    if (cell.animals.get(k).satiety <= 0) {
                         cell.animals.remove(k);
                         deleted++;
                         k--;
@@ -58,7 +63,13 @@ public class SimulationManager {
                 }
 
 
-                // TODO: Implement other animal on animal interactions
+                for (Animal animal:cell.animals) {
+                    double doInteraction = Math.random();
+                    if(doInteraction>=0.5){
+                        int ind = randomGenerator.nextInt(cell.animals.size());
+                        interaction.performInteraction(animal,cell.animals.get(ind));
+                    }
+                }
 
                 // Multiplying
                 for (int k = 1; k < cell.animals.size(); k += 2) {
@@ -110,14 +121,24 @@ public class SimulationManager {
         return plants;
     }
 
-    public double averageDigestion() {
-        double avgDigestion = 0;
+    public HashMap<GenomCode, Double> averageGenomesValues() {
+        HashMap<GenomCode, Double> genSum = new HashMap<>();
+        for(GenomCode code:GenomCode.class.getEnumConstants()){
+            genSum.put(code,0.0);
+        }
+
         ArrayList<Genome> genomes = getGenomes();
         for(var genome : genomes) {
-            avgDigestion += genome.geneticCode.get("digestion");
+            for(GenomCode code:GenomCode.class.getEnumConstants()){
+                genSum.put(code,genome.geneticCode.get(code));
+            }
         }
-        avgDigestion /= genomes.size();
-        return avgDigestion;
+
+        for(GenomCode code:GenomCode.class.getEnumConstants()){
+            genSum.put(code,genSum.get(code)/genomes.size());
+        }
+
+        return genSum;
     }
 
     public void printGridInConsole() {

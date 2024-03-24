@@ -81,7 +81,7 @@ public class SimulationEngine implements Runnable{
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
         for (int i = 0; i < 30; i++) {
-            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.5));
+            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4,0.1));
         }
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(Settings.initialPlantsNo);
@@ -95,7 +95,7 @@ public class SimulationEngine implements Runnable{
         simulationManager.printGridInConsole();
         System.out.println("Number of animals: "+simulationManager.getGenomes().size());
         System.out.println("Number of plants: "+simulationManager.getPlants().size());
-        System.out.println("Average digestion: "+ simulationManager.averageDigestion());
+        System.out.println(simulationManager.averageGenomesValues().toString());
     }
 
     public void start(){

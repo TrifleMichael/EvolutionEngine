@@ -115,7 +115,7 @@ public class BoardController {
         epochsNo.setText(String.valueOf(step));
         animalsNo.setText(String.valueOf(simulationManager.getGenomes().size()));
         plantsNo.setText(String.valueOf(simulationManager.getPlants().size()));
-        avgDigestion.setText(String.valueOf(simulationManager.averageDigestion()));
+        avgDigestion.setText(String.valueOf(simulationManager.averageGenomesValues().get(GenomCode.DIGESTION)));
     }
 
     static String cellToString(Cell cell) {

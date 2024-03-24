@@ -8,7 +8,7 @@ public class Animal {
         this.genome = genome;
     }
 
-    public double getGene(String geneName) {
+    public double getGene(GenomCode geneName) {
         return genome.geneticCode.get(geneName);
     }
 
