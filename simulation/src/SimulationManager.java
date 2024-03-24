@@ -133,6 +133,20 @@ public class SimulationManager {
         }
         return maxGenome;
     }
+
+    public HashMap<GenomCode, Double> minGenomePerCode(GenomCode genomeCode){
+        HashMap<GenomCode, Double> minGenome= new HashMap<>();
+        for(GenomCode code:GenomCode.class.getEnumConstants()){
+            minGenome.put(code,2.0);
+        }
+        ArrayList<Genome> genomes = getGenomes();
+        for(var genome : genomes) {
+            if(genome.geneticCode.get(genomeCode)<=minGenome.get(genomeCode))
+                minGenome = genome.geneticCode;
+        }
+        return minGenome;
+    }
+
     public HashMap<GenomCode, Double> averageGenomesValues() {
         HashMap<GenomCode, Double> genSum = new HashMap<>();
         for(GenomCode code:GenomCode.class.getEnumConstants()){

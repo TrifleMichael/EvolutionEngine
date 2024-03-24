@@ -96,6 +96,10 @@ public class SimulationEngine implements Runnable{
         System.out.println("Number of animals: "+simulationManager.getGenomes().size());
         System.out.println("Number of plants: "+simulationManager.getPlants().size());
         System.out.println(simulationManager.averageGenomesValues().toString());
+        System.out.println("Max digestion: " + simulationManager.maxGenomePerCode(GenomCode.DIGESTION).toString());
+        System.out.println("Min digestion: " + simulationManager.minGenomePerCode(GenomCode.DIGESTION).toString());
+        System.out.println("Max strength: " + simulationManager.maxGenomePerCode(GenomCode.STRENGTH).toString());
+        System.out.println("Min strength: " + simulationManager.minGenomePerCode(GenomCode.STRENGTH).toString());
     }
 
     public void start(){
