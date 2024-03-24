@@ -1,3 +1,6 @@
+import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
+
 import java.util.ArrayList;
 
 public class Grid {

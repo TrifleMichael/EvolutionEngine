@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.scene.text.Text?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      style="-fx-padding: 10"
+>
+    <stylesheets>
+        <URL value="@/css/board.css"/>
+    </stylesheets>
+
+    <HBox styleClass="simulationButtonsBox" alignment="CENTER" maxHeight="100" prefHeight="100">
+        <Button styleClass="simulationButton" fx:id="startButton" text="START" onAction="#handleStartClick"/>
+        <Button styleClass="simulationButton" fx:id="stopButton" text="STOP" onAction="#handleStopClick"/>
+        <Button styleClass="simulationButton" fx:id="stepButton" text="ONE STEP" onAction="#handleStepClick"/>
+        <Button styleClass="simulationButton" fx:id="endButton" text="END" onAction="#handleEndClick"/>
+    </HBox>
+
+    <HBox styleClass="content">
+        <GridPane fx:id="boardGrid"/>
+        <VBox styleClass="statsContainer">
+            <HBox styleClass="statComponent">
+                <Text>Epoch: </Text>
+                <Text fx:id="epochsNo">0</Text>
+            </HBox>
+            <HBox styleClass="statComponent">
+                <Text>Number of animals: </Text>
+                <Text fx:id="animalsNo">0</Text>
+            </HBox>
+            <HBox styleClass="statComponent">
+                <Text>Number of plants: </Text>
+                <Text fx:id="plantsNo">0</Text>
+            </HBox>
+            <HBox styleClass="statComponent">
+                <Text>Average digestion: </Text>
+                <Text fx:id="avgDigestion">0</Text>
+            </HBox>
+
+
+        </VBox>
+    </HBox>
+
+
+</VBox>
+
