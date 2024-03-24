@@ -121,16 +121,27 @@ public class SimulationManager {
         return plants;
     }
 
+    public HashMap<GenomCode, Double> maxGenomePerCode(GenomCode genomeCode){
+        HashMap<GenomCode, Double> maxGenome= new HashMap<>();
+        for(GenomCode code:GenomCode.class.getEnumConstants()){
+            maxGenome.put(code,0.0);
+        }
+        ArrayList<Genome> genomes = getGenomes();
+        for(var genome : genomes) {
+                if(genome.geneticCode.get(genomeCode)>=maxGenome.get(genomeCode))
+                    maxGenome = genome.geneticCode;
+        }
+        return maxGenome;
+    }
     public HashMap<GenomCode, Double> averageGenomesValues() {
         HashMap<GenomCode, Double> genSum = new HashMap<>();
         for(GenomCode code:GenomCode.class.getEnumConstants()){
             genSum.put(code,0.0);
         }
-
         ArrayList<Genome> genomes = getGenomes();
         for(var genome : genomes) {
             for(GenomCode code:GenomCode.class.getEnumConstants()){
-                genSum.put(code,genome.geneticCode.get(code));
+                genSum.put(code,genSum.get(code)+genome.geneticCode.get(code));
             }
         }
 
