@@ -18,9 +18,10 @@
 
     <HBox styleClass="simulationButtonsBox" alignment="CENTER" maxHeight="100" prefHeight="100">
         <Button styleClass="simulationButton" fx:id="startButton" text="START" onAction="#handleStartClick"/>
-        <Button styleClass="simulationButton" fx:id="stopButton" text="STOP" onAction="#handleStopClick"/>
+        <Button styleClass="simulationButton" fx:id="stopButton" text="STOP" disable="true" onAction="#handleStopClick"/>
         <Button styleClass="simulationButton" fx:id="stepButton" text="ONE STEP" onAction="#handleStepClick"/>
         <Button styleClass="simulationButton" fx:id="endButton" text="END" onAction="#handleEndClick"/>
+        <Button styleClass="simulationButton" fx:id="restartButton" text="RESTART" disable="true" onAction="#handleRestartClick"/>
     </HBox>
 
     <HBox styleClass="content">

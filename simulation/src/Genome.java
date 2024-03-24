@@ -5,13 +5,12 @@ public class Genome {
 
     public HashMap<GenomCode, Double> geneticCode = new HashMap<>();
 
-    public Genome(double strength, double sight, double camouflage, double speed, double digestion, double aggression) {
+    public Genome(double strength, double sight, double camouflage, double speed, double digestion) {
         geneticCode.put(GenomCode.STRENGTH, strength);
         geneticCode.put(GenomCode.SIGHT, sight);
         geneticCode.put(GenomCode.CAMOUFLAGE, camouflage);
         geneticCode.put(GenomCode.SPEED, speed);
         geneticCode.put(GenomCode.DIGESTION, digestion);
-        geneticCode.put(GenomCode.AGGRESSION, aggression);
     }
 
     public Genome(HashMap<GenomCode, Double> geneticCode) {

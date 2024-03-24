@@ -3,6 +3,5 @@ public enum GenomCode {
     SIGHT,
     CAMOUFLAGE,
     SPEED,
-    DIGESTION,
-    AGGRESSION
+    DIGESTION
 }

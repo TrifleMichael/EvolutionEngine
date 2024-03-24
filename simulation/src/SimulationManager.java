@@ -19,7 +19,7 @@ public class SimulationManager {
     public void populateGrid(ArrayList<Genome> genomes) {
         Random random = new Random();
         for (Genome genome : genomes) {
-            grid.addAnimal(new Animal(genome), Math.abs(random.nextInt()) % grid.x, Math.abs(random.nextInt()) % grid.y);
+            grid.addAnimal(new Animal(genome, Math.random()), Math.abs(random.nextInt()) % grid.x, Math.abs(random.nextInt()) % grid.y);
         }
     }
 
@@ -79,7 +79,7 @@ public class SimulationManager {
                         animal1.satiety -= Settings.satietyLostOnBirth; // TODO Also remove hard-code
                         animal2.satiety -= Settings.satietyLostOnBirth;
                         Genome newGenome = animal1.genome.combineGenomes(animal2.genome);
-                        cell.animals.add(new Animal(newGenome));
+                        cell.animals.add(new Animal(newGenome, Math.random()));
                     }
                 }
 

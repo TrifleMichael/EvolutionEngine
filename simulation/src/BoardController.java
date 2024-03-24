@@ -34,6 +34,9 @@ public class BoardController {
     private Button endButton;
 
     @FXML
+    private Button restartButton;
+
+    @FXML
     private Text epochsNo;
 
     @FXML
@@ -54,15 +57,14 @@ public class BoardController {
             // set height and width here for this login scene
             scene = new Scene(parent, 1200, 800);
 
-            simulation = new SimulationEngine(this);
-
-            simulationThread = new Thread(simulation);
-            simulationThread.start();
+            startSimulation();
         } catch (IOException ex) {
             System.out.println("Error displaying GUI");
             throw new RuntimeException(ex);
         }
     }
+
+
 
     public void launchScene(Stage stage){
             this.stage = stage;
@@ -70,6 +72,13 @@ public class BoardController {
             stage.setResizable(false);
             stage.hide();
             stage.show();
+    }
+
+    public void startSimulation(){
+        simulation = new SimulationEngine(this);
+
+        simulationThread = new Thread(simulation);
+        simulationThread.start();
     }
 
     public void hasChanges(SimulationManager simulationManager, int step){
@@ -148,7 +157,18 @@ public class BoardController {
         stepButton.setDisable(true);
         stopButton.setDisable(true);
         endButton.setDisable(true);
+        restartButton.setDisable(false);
     }
+    @FXML
+    private void handleRestartClick(ActionEvent event) throws Exception{
+        restartButton.setDisable(true);
+        startButton.setDisable(false);
+        stepButton.setDisable(false);
+        stopButton.setDisable(true);
+        endButton.setDisable(false);
+        startSimulation();
+    }
+
     public void stopSimulation() {
         startButton.setDisable(true);
         stepButton.setDisable(false);
