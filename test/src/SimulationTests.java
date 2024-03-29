@@ -7,7 +7,7 @@ public class SimulationTests {
 
     static void test1() {
         // Setup
-        var simulationManager = new SimulationManager(10, 10);
+        var simulationManager = new SimulationManager(new Grid(10,10));
         ArrayList<Genome> genomes = new ArrayList<>();
         for(int i = 0; i < 30; i++) {
             genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.5));
@@ -33,7 +33,7 @@ public class SimulationTests {
     static double averageDigestion(ArrayList<Genome> genomes) {
         double avgDigestion = 0;
         for(var genome : genomes) {
-            avgDigestion += genome.geneticCode.get("digestion");
+            avgDigestion += genome.geneticCode.get(GenomCode.DIGESTION);
         }
         avgDigestion /= genomes.size();
         return avgDigestion;

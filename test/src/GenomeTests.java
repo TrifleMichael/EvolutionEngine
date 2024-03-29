@@ -6,7 +6,7 @@ public class GenomeTests {
     }
 
     static void test1() {
-        Genome genome = new Genome(0.2, 0.2, 0.2, 0.2, 0.2);
+        Genome genome = new Genome(0.2,0.2,0.2,0.2,0.2);
         Genome newGenome = genome.mutateGeneticCode();
 
         newGenome.printGenome();
