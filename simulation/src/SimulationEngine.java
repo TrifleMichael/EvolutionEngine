@@ -81,7 +81,7 @@ public class SimulationEngine implements Runnable{
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
         for (int i = 0; i < 30; i++) {
-            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4));
+            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4, 0.1));
         }
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(Settings.initialPlantsNo);

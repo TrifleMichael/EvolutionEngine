@@ -3,11 +3,11 @@ public class Animal {
     Genome genome;
 
     double satiety = 1.0;
-    double aggresion = 0.5;
+    double aggresion;
 
-    public Animal(Genome genome, double aggresion) {
+    public Animal(Genome genome) {
         this.genome = genome;
-        this.aggresion = aggresion;
+        this.aggresion = genome.independantGeneticCode.get(IndependantGenomeCode.AGGRESSION);
     }
 
     public double getGene(GenomCode geneName) {

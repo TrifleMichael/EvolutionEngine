@@ -10,7 +10,7 @@ public class SimulationTests {
         var simulationManager = new SimulationManager(new Grid(10,10));
         ArrayList<Genome> genomes = new ArrayList<>();
         for(int i = 0; i < 30; i++) {
-            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.5));
+            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.5, 0));
         }
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(30);
