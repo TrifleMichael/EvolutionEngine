@@ -12,12 +12,10 @@ public class GenomeAnalyzer {
         if (genomes.size() != 0) {
             // Get list of parameter values
             List<Double> parameterValues = genomes.stream().map(g -> g.geneticCode.get(parameter)).sorted().toList();
-            // Count how many fall in each bucket
-            int bucketSize = parameterValues.size() / bucketNum;
-            for (int bucketIndex = 0; bucketIndex < bucketNum; bucketIndex++) {
-                for (int dataIndex = bucketIndex * bucketSize; dataIndex < min(bucketIndex * (bucketSize+1), parameterValues.size()); dataIndex++) {
-                    valuesInBuckets[bucketIndex] += 1;
-                }
+            // Sort values into buckets
+            for (Double value : parameterValues) {
+                int bucketIndex = (int)Math.floor(value * bucketNum);
+                valuesInBuckets[bucketIndex]++;
             }
         }
         return valuesInBuckets;
