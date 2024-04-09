@@ -100,6 +100,19 @@ public class SimulationEngine implements Runnable{
         System.out.println("Min digestion: " + simulationManager.minGenomePerCode(GenomCode.DIGESTION).toString());
         System.out.println("Max strength: " + simulationManager.maxGenomePerCode(GenomCode.STRENGTH).toString());
         System.out.println("Min strength: " + simulationManager.minGenomePerCode(GenomCode.STRENGTH).toString());
+
+        System.out.println("Digestion:");
+        int[] buckets = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.DIGESTION, 10);
+        for(int i = 0; i < 10; i++) {
+            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets[i] + ", ");
+        }
+        System.out.println();
+        System.out.println("Attack:");
+        int[] buckets2 = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.STRENGTH, 10);
+        for(int i = 0; i < 10; i++) {
+            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets2[i] + ", ");
+        }
+        System.out.println();
     }
 
     public void start(){
