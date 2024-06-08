@@ -3,6 +3,8 @@ import java.util.List;
 
 public class Settings {
 
+    static public double maxIntraSpeciesMSE = 0.4;
+
     static public int iterations = 1000;
 
     static public int boardSize = 10;

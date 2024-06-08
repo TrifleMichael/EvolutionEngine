@@ -22,6 +22,7 @@ public class SimulationEngine implements Runnable{
 //    private final IntegerProperty refresh = new SimpleIntegerProperty(0);
     private int step = 0;
 
+    SimulationTracker simulationTracker = new SimulationTracker();
 
     public SimulationEngine(BoardController boardController) {
         this.boardController = boardController;
@@ -80,8 +81,11 @@ public class SimulationEngine implements Runnable{
         grid =new Grid(Settings.boardSize, Settings.boardSize);
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 100; i++) {
             genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4, 0.1));
+        }
+        for (int i = 0; i < 30; i++) {
+            genomes.add(new Genome(0.4, 0.1, 0.4, 0.0, 0.0, 1));
         }
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(Settings.initialPlantsNo);
@@ -89,30 +93,48 @@ public class SimulationEngine implements Runnable{
 
     protected void simulationStep(){
         simulationManager.iterate();
-        simulationManager.addPlants(2);
+        simulationManager.addPlants(10);
 
         System.out.println("----- Iteration:" + step + " ------");
-        simulationManager.printGridInConsole();
-        System.out.println("Number of animals: "+simulationManager.getGenomes().size());
-        System.out.println("Number of plants: "+simulationManager.getPlants().size());
-        System.out.println(simulationManager.averageGenomesValues().toString());
-        System.out.println("Max digestion: " + simulationManager.maxGenomePerCode(GenomCode.DIGESTION).toString());
-        System.out.println("Min digestion: " + simulationManager.minGenomePerCode(GenomCode.DIGESTION).toString());
-        System.out.println("Max strength: " + simulationManager.maxGenomePerCode(GenomCode.STRENGTH).toString());
-        System.out.println("Min strength: " + simulationManager.minGenomePerCode(GenomCode.STRENGTH).toString());
+//        simulationManager.printGridInConsole();
+//        System.out.println("Number of animals: "+simulationManager.getGenomes().size());
+//        System.out.println("Number of plants: "+simulationManager.getPlants().size());
+//        System.out.println(simulationManager.averageGenomesValues().toString());
+//        System.out.println("Max digestion: " + simulationManager.maxGenomePerCode(GenomCode.DIGESTION).toString());
+//        System.out.println("Min digestion: " + simulationManager.minGenomePerCode(GenomCode.DIGESTION).toString());
+//        System.out.println("Max strength: " + simulationManager.maxGenomePerCode(GenomCode.STRENGTH).toString());
+//        System.out.println("Min strength: " + simulationManager.minGenomePerCode(GenomCode.STRENGTH).toString());
 
-        System.out.println("Digestion:");
-        int[] buckets = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.DIGESTION, 10);
-        for(int i = 0; i < 10; i++) {
-            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets[i] + ", ");
+//        System.out.println("Digestion:");
+//        int[] buckets = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.DIGESTION, 10);
+//        for(int i = 0; i < 10; i++) {
+//            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets[i] + ", ");
+//        }
+//        System.out.println();
+//        System.out.println("Attack:");
+//        int[] buckets2 = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.STRENGTH, 10);
+//        for(int i = 0; i < 10; i++) {
+//            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets2[i] + ", ");
+//        }
+//        System.out.println();
+
+        updateData();
+        if (step % 100 == 0) {
+            plotData();
         }
-        System.out.println();
-        System.out.println("Attack:");
-        int[] buckets2 = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.STRENGTH, 10);
-        for(int i = 0; i < 10; i++) {
-            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets2[i] + ", ");
-        }
-        System.out.println();
+
+    }
+
+    public void updateData() {
+        int animalNum = simulationManager.getGenomes().size();
+        double foodValueOnMap = simulationManager.getPlants().stream().map(p -> p.foodValue).reduce(Double::sum).orElse(0.);
+        simulationTracker.addData(step, animalNum, "animal_number");
+        simulationTracker.addData(step, (float)foodValueOnMap, "food_on_map");
+    }
+
+    public void plotData() {
+        simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "animal_number"+step+".png");
+        simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "food_on_map"+step+".png");
     }
 
     public void start(){

@@ -3,6 +3,9 @@ import java.util.LinkedList;
 
 public class Cell {
     LinkedList<Animal> animals = new LinkedList<>();
+
+    LinkedList<Animal> waitingList = new LinkedList<>();
+
     LinkedList<Plant> plants = new LinkedList<>();
     int x, y;
     Grid grid;

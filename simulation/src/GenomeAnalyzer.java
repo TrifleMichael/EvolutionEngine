@@ -15,6 +15,7 @@ public class GenomeAnalyzer {
             // Sort values into buckets
             for (Double value : parameterValues) {
                 int bucketIndex = (int)Math.floor(value * bucketNum);
+                bucketIndex = bucketIndex == bucketNum ? bucketNum - 1 : bucketIndex; // Avoid going over the bucket count (will happen if parameter = 1)
                 valuesInBuckets[bucketIndex]++;
             }
         }

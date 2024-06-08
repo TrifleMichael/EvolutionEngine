@@ -51,46 +51,73 @@ public class SimulationManager {
                    // Each animal tries to eat the plants, finishes after eating either 0 or 1
                 }
 
+                // Multiplying
+                for (int k = 1; k < cell.animals.size(); k += 2) {
+                    Animal animal1 = cell.animals.get(k - 1);
+                    Animal animal2 = cell.animals.get(k);
+                    if (areSameSpecies(animal1, animal2)) {
+                        if (animal1.satiety > Settings.satietyRequiredForBirth && animal2.satiety > Settings.satietyRequiredForBirth) {
+                            animal1.satiety -= Settings.satietyLostOnBirth;
+                            animal2.satiety -= Settings.satietyLostOnBirth;
+                            Genome newGenome = animal1.genome.combineGenomes(animal2.genome);
+                            Animal newAnimal = new Animal(newGenome);
+                            newAnimal.satiety = Settings.satietyLostOnBirth * 2;
+                            cell.animals.add(newAnimal);
+                        }
+                    }
+                }
+
+                // Interacting
+                for (Animal animal:cell.animals) {
+                    double doInteraction = Math.random();
+                    if(doInteraction>=0.5){
+                        int ind = randomGenerator.nextInt(cell.animals.size());
+                        if (cell.animals.get(ind) != animal) { // TODO quickfix to avoid self interaction, do something better
+                            if (!animal.dead && !cell.animals.get(ind).dead) {
+                                if (!areSameSpecies(cell.animals.get(ind), animal)) { // Interact only with other species
+                                    interaction.performInteraction(animal, cell.animals.get(ind));
+                                }
+                            }
+                        }
+                    }
+                }
+
                 // Starving
                 cell.animals.forEach(animal -> animal.getHungry(Settings.satietyLostPerIteration));
                 int deleted = 0;
                 for (int k = 0; k < cell.animals.size() - deleted; k++) { // Hack na to że nie da się sensownie iterować i usuwać elementów z collection
-                    if (cell.animals.get(k).satiety <= 0) {
+                    if (cell.animals.get(k).satiety <= 0 || cell.animals.get(k).dead) {
                         cell.animals.remove(k);
                         deleted++;
                         k--;
                     }
                 }
 
-
-                for (Animal animal:cell.animals) {
-                    double doInteraction = Math.random();
-                    if(doInteraction>=0.5){
-                        int ind = randomGenerator.nextInt(cell.animals.size());
-                        interaction.performInteraction(animal,cell.animals.get(ind));
-                    }
-                }
-
-                // Multiplying
-                for (int k = 1; k < cell.animals.size(); k += 2) {
-                    Animal animal1 = cell.animals.get(k - 1);
-                    Animal animal2 = cell.animals.get(k);
-                    if (animal1.satiety > Settings.satietyRequiredForBirth && animal2.satiety > Settings.satietyRequiredForBirth) { // TODO: Hardcoded but should not be
-                        animal1.satiety -= Settings.satietyLostOnBirth; // TODO Also remove hard-code
-                        animal2.satiety -= Settings.satietyLostOnBirth;
-                        Genome newGenome = animal1.genome.combineGenomes(animal2.genome);
-                        cell.animals.add(new Animal(newGenome));
-                    }
-                }
-
                 // Moving
                 for (Animal animal : cell.animals) {
                     Cell destination = neighbours.get((int) (Math.random() * neighbours.size()));
-                    destination.animals.add(animal);
+                    destination.waitingList.add(animal);
                 }
-                cell.animals.clear();
             }
         }
+
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
+                Cell cell = grid.cells[i][j];
+                cell.animals.addAll(cell.waitingList);
+                cell.waitingList.clear();
+            }
+        }
+    }
+
+    public boolean areSameSpecies(Animal animal1, Animal animal2) {
+        double mse = 0;
+        for(GenomCode code : GenomCode.values()) {
+            double diff = (animal1.genome.geneticCode.get(code) - animal2.genome.geneticCode.get(code));
+            diff = diff * diff;
+            mse += diff;
+        }
+        return Math.sqrt(mse) < Settings.maxIntraSpeciesMSE;
     }
 
     public Cell getCell(int x, int y) {

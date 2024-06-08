@@ -5,6 +5,8 @@ public class Animal {
     double satiety = 1.0;
     double aggresion;
 
+    boolean dead = false;
+
     public Animal(Genome genome) {
         this.genome = genome;
         this.aggresion = genome.independantGeneticCode.get(IndependantGenomeCode.AGGRESSION);

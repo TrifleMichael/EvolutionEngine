@@ -61,9 +61,11 @@ public class Interaction {
          if(A.getGene(GenomCode.STRENGTH) >= B.getGene(GenomCode.STRENGTH)){
              A.satiety += B.satiety;
              B.satiety = 0;
+             B.dead = true;
         }else{
              B.satiety += A.satiety;
              A.satiety = 0;
+             A.dead = true;
          }
     }
 
@@ -72,14 +74,16 @@ public class Interaction {
         if(A.getGene(GenomCode.STRENGTH)+surpriseModif >= B.getGene(GenomCode.STRENGTH)){
             A.satiety += B.satiety;
             B.satiety = 0;
+            B.dead = true;
         }else{
             B.satiety += A.satiety;
             A.satiety = 0;
+            A.dead = true;
         }
     }
 
     private void exhaust(Animal A, Animal B){
-        double exhaustValue = Math.random()/10;
+        double exhaustValue = Math.random()/1000;
         A.satiety-=exhaustValue;
         B.satiety-=exhaustValue;
     }
