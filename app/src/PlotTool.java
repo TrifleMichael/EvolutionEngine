@@ -54,4 +54,16 @@ public class PlotTool {
 
         return floatArray;
     }
+
+    public static float[] toFloatArray(int[] intArray) {
+        // Create a float array of the same size as the ArrayList
+        float[] floatArray = new float[intArray.length];
+
+        // Iterate over the ArrayList and assign each value to the float array
+        for (int i = 0; i < intArray.length; i++) {
+            floatArray[i] = intArray[i];
+        }
+
+        return floatArray;
+    }
 }

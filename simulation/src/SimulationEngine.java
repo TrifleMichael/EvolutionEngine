@@ -81,10 +81,10 @@ public class SimulationEngine implements Runnable{
         grid =new Grid(Settings.boardSize, Settings.boardSize);
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4, 0.1));
         }
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 200; i++) {
             genomes.add(new Genome(0.4, 0.1, 0.4, 0.0, 0.0, 1));
         }
         simulationManager.populateGrid(genomes);
@@ -93,7 +93,7 @@ public class SimulationEngine implements Runnable{
 
     protected void simulationStep(){
         simulationManager.iterate();
-        simulationManager.addPlants(10);
+        simulationManager.addPlants(40);
 
         System.out.println("----- Iteration:" + step + " ------");
 //        simulationManager.printGridInConsole();
@@ -106,10 +106,7 @@ public class SimulationEngine implements Runnable{
 //        System.out.println("Min strength: " + simulationManager.minGenomePerCode(GenomCode.STRENGTH).toString());
 
 //        System.out.println("Digestion:");
-//        int[] buckets = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.DIGESTION, 10);
-//        for(int i = 0; i < 10; i++) {
-//            System.out.print(i*10 + "-" + (i+1)*10 + "%: " + buckets[i] + ", ");
-//        }
+
 //        System.out.println();
 //        System.out.println("Attack:");
 //        int[] buckets2 = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), GenomCode.STRENGTH, 10);
@@ -118,23 +115,36 @@ public class SimulationEngine implements Runnable{
 //        }
 //        System.out.println();
 
-        updateData();
-        if (step % 100 == 0) {
-            plotData();
+
+        updateLinearData();
+        if (step % 10 == 0) {
+            ploLineartData();
+            createGeneSnapshot(GenomCode.DIGESTION, 100, "DigestionSnapshot", "Digestion Value", "Number of Individuals", "plots/DigestionSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.STRENGTH, 100, "StrengthSnapshot", "Strength Value", "Number of Individuals", "plots/StrengthSnapshot"+step+".png");
         }
 
     }
 
-    public void updateData() {
+    public void createGeneSnapshot(GenomCode genomCode, int bucketNumber, String title, String xAxisLabel, String yAxisLabel, String filePath) {
+        int[] yValues = GenomeAnalyzer.bucketCount(simulationManager.getGenomes(), genomCode, bucketNumber);
+        float[] xValues = new float[bucketNumber];
+        for (int i = 0; i < bucketNumber; i++) {
+            xValues[i] = (float) i / bucketNumber;
+        }
+        PlotTool.createAndSave2DPlot(xValues, PlotTool.toFloatArray(yValues), title, xAxisLabel, yAxisLabel, filePath);
+    }
+
+    public void updateLinearData() {
         int animalNum = simulationManager.getGenomes().size();
-        double foodValueOnMap = simulationManager.getPlants().stream().map(p -> p.foodValue).reduce(Double::sum).orElse(0.);
         simulationTracker.addData(step, animalNum, "animal_number");
+
+        double foodValueOnMap = simulationManager.getPlants().stream().map(p -> p.foodValue).reduce(Double::sum).orElse(0.);
         simulationTracker.addData(step, (float)foodValueOnMap, "food_on_map");
     }
 
-    public void plotData() {
-        simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "animal_number"+step+".png");
-        simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "food_on_map"+step+".png");
+    public void ploLineartData() {
+        simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "plots/animal_number"+step+".png");
+        simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "plots/food_on_map"+step+".png");
     }
 
     public void start(){

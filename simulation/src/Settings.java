@@ -9,7 +9,7 @@ public class Settings {
 
     static public int boardSize = 10;
 
-    static public int initialPlantsNo = 30;
+    static public int initialPlantsNo = 100;
 
     static public double mutationStandardDeviation = 0.02;
 
