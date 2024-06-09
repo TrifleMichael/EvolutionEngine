@@ -81,10 +81,10 @@ public class SimulationEngine implements Runnable{
         grid =new Grid(Settings.boardSize, Settings.boardSize);
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 100; i++) {
             genomes.add(new Genome(0.0, 0.0, 0.0, 0.0, 1, 0.0));
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 20; i++) {
             genomes.add(new Genome(0.3, 0.2, 0.3, 0.2, 0.0, 1));
         }
         simulationManager.populateGrid(genomes);
@@ -92,10 +92,10 @@ public class SimulationEngine implements Runnable{
     }
 
     protected void simulationStep(){
+        System.out.println("----- Iteration:" + step + " ------");
         simulationManager.iterate();
         simulationManager.addPlants(40);
 
-        System.out.println("----- Iteration:" + step + " ------");
 //        simulationManager.printGridInConsole();
 //        System.out.println("Number of animals: "+simulationManager.getGenomes().size());
 //        System.out.println("Number of plants: "+simulationManager.getPlants().size());
@@ -115,6 +115,7 @@ public class SimulationEngine implements Runnable{
 //        }
 //        System.out.println();
 
+        System.out.println("Animal number: "+simulationManager.getGenomes().size());
 
         updateLinearData();
         if (step % 10 == 0) {

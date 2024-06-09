@@ -21,6 +21,8 @@ public class Settings {
 
     static public double startingSatiety = 1;
 
+    static public double maxSatiety = 3;
+
     public static void setIterations(int iterations) {
         Settings.iterations = iterations;
     }

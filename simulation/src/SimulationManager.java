@@ -34,24 +34,25 @@ public class SimulationManager {
         for (int i = 0; i < grid.x; i++) {
             for (int j = 0; j < grid.y; j++) {
                 Cell cell = grid.cells[i][j];
-                var neighbours = grid.getCellNeighbors(i, j);
-                // cell.animals.sort(Comparator.comparing((Animal a) -> (int)(Math.random() * 1000))); // Shuffle animals This throws an error after a longer time
                 Collections.shuffle(cell.animals);
                 // Eating
                 for (Animal animal : cell.animals) {
-                    ListIterator<Plant> plantIt = cell.plants.listIterator();
-                    while(plantIt.hasNext()){
-                        Plant plant = plantIt.next();
-                        if (plant.bitterness < animal.getGene(GenomCode.DIGESTION)) {
-                            animal.satiety += plant.foodValue;
-                            plantIt.remove();
-                            break;
+                    if (animal.satiety < Settings.maxSatiety) {
+                        ListIterator<Plant> plantIt = cell.plants.listIterator();
+                        while (plantIt.hasNext()) {
+                            Plant plant = plantIt.next();
+                            if (plant.bitterness < animal.getGene(GenomCode.DIGESTION)) {
+                                animal.satiety += plant.foodValue;
+                                plantIt.remove();
+                                break;
+                            }
                         }
+                        // Each animal tries to eat the plants, finishes after eating either 0 or 1
                     }
-                   // Each animal tries to eat the plants, finishes after eating either 0 or 1
                 }
 
                 // Multiplying
+                Collections.shuffle(cell.animals);
                 for (int k = 1; k < cell.animals.size(); k += 2) {
                     Animal animal1 = cell.animals.get(k - 1);
                     Animal animal2 = cell.animals.get(k);
@@ -62,15 +63,15 @@ public class SimulationManager {
                             Genome newGenome = animal1.genome.combineGenomes(animal2.genome);
                             Animal newAnimal = new Animal(newGenome);
                             newAnimal.satiety = Settings.satietyLostOnBirth * 2;
-                            cell.animals.add(newAnimal);
+                            cell.waitingList.add(newAnimal);
                         }
                     }
                 }
 
                 // Interacting
-                for (Animal animal:cell.animals) {
+                for (Animal animal : cell.animals) {
                     double doInteraction = Math.random();
-                    if(doInteraction>=0.5){
+                    if (doInteraction >= 0.5) {
                         int ind = randomGenerator.nextInt(cell.animals.size());
                         if (cell.animals.get(ind) != animal) { // TODO quickfix to avoid self interaction, do something better
                             if (!animal.dead && !cell.animals.get(ind).dead) {
@@ -92,18 +93,27 @@ public class SimulationManager {
                         k--;
                     }
                 }
-
-                // Moving
-                for (Animal animal : cell.animals) {
-                    Cell destination = neighbours.get((int) (Math.random() * neighbours.size()));
-                    destination.waitingList.add(animal);
-                }
             }
         }
 
         for (int i = 0; i < grid.x; i++) {
             for (int j = 0; j < grid.y; j++) {
                 Cell cell = grid.cells[i][j];
+                var neighbours = grid.getCellNeighbors(i, j);
+                // Moving
+                for (Animal animal : cell.animals) {
+                    Cell destination = neighbours.get((int) (Math.random() * neighbours.size()));
+                    destination.waitingList.add(animal);
+                }
+                cell.animals.clear();
+            }
+        }
+
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
+                Cell cell = grid.cells[i][j];
+                if (cell.waitingList.size() != 0) {
+                }
                 cell.animals.addAll(cell.waitingList);
                 cell.waitingList.clear();
             }
@@ -205,6 +215,17 @@ public class SimulationManager {
 
     public String cellToString(Cell cell) {
         return cell.animals.size() + " " + cell.plants.size();
+    }
+
+    int countGridAnimals() {
+        int animalCount = 0;
+        for (int i = 0; i < grid.x; i++) {
+            for (int j = 0; j < grid.y; j++) {
+                Cell cell = getCell(i, j);
+                animalCount += cell.animals.size();
+            }
+        }
+        return animalCount;
     }
 
 }
