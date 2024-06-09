@@ -84,4 +84,15 @@ public class Genome {
             System.out.println(key + " - " + value);
         }
     }
+
+    @Override
+    public String toString() {
+        String g = "";
+        for (var entry : geneticCode.entrySet()) {
+            GenomCode key = entry.getKey();
+            double value = entry.getValue();
+            g += key + ":" + value + ",";
+        }
+        return g;
+    }
 }

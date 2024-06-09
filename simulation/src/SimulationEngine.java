@@ -5,6 +5,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -126,6 +128,9 @@ public class SimulationEngine implements Runnable{
             createGeneSnapshot(GenomCode.SIGHT, 100, "SightSnapshot", "Sight Value", "Number of Individuals", "plots/sight/SightSnapshot"+step+".png");
             createGeneSnapshot(GenomCode.CAMOUFLAGE, 100, "CamouflageSnapshot", "Camouflage Value", "Number of Individuals", "plots/camouflage/CamouflageSnapshot"+step+".png");
         }
+        if (step % 100 == 0) {
+            storeGenomes();
+        }
 
     }
 
@@ -149,6 +154,20 @@ public class SimulationEngine implements Runnable{
     public void ploLineartData() {
         simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "plots/animal_number/animal_number"+step+".png");
         simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "plots/food_on_map/food_on_map"+step+".png");
+    }
+
+    public void storeGenomes() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Genome g : simulationManager.getGenomes()) {
+            stringBuilder.append(g.toString());
+            stringBuilder.append("\n");
+        }
+        try (FileWriter fileWriter = new FileWriter("genomes_"+step+".txt")) {
+            fileWriter.write(stringBuilder.toString());
+        } catch (IOException e) {
+            System.out.println("Could not store genomes in a file.");
+            e.printStackTrace();
+        }
     }
 
     public void start(){
