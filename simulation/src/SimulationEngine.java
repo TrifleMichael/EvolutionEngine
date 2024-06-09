@@ -82,10 +82,10 @@ public class SimulationEngine implements Runnable{
         simulationManager = new SimulationManager(grid);
         //TODO Add all parameters to the settings screen.
         for (int i = 0; i < 500; i++) {
-            genomes.add(new Genome(0.1, 0.1, 0.1, 0.1, 0.4, 0.1));
+            genomes.add(new Genome(0.0, 0.0, 0.0, 0.0, 1, 0.0));
         }
-        for (int i = 0; i < 200; i++) {
-            genomes.add(new Genome(0.4, 0.1, 0.4, 0.0, 0.0, 1));
+        for (int i = 0; i < 5; i++) {
+            genomes.add(new Genome(0.3, 0.2, 0.3, 0.2, 0.0, 1));
         }
         simulationManager.populateGrid(genomes);
         simulationManager.addPlants(Settings.initialPlantsNo);
@@ -119,8 +119,11 @@ public class SimulationEngine implements Runnable{
         updateLinearData();
         if (step % 10 == 0) {
             ploLineartData();
-            createGeneSnapshot(GenomCode.DIGESTION, 100, "DigestionSnapshot", "Digestion Value", "Number of Individuals", "plots/DigestionSnapshot"+step+".png");
-            createGeneSnapshot(GenomCode.STRENGTH, 100, "StrengthSnapshot", "Strength Value", "Number of Individuals", "plots/StrengthSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.DIGESTION, 100, "DigestionSnapshot", "Digestion Value", "Number of Individuals", "plots/digestion/DigestionSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.STRENGTH, 100, "StrengthSnapshot", "Strength Value", "Number of Individuals", "plots/strength/StrengthSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.SPEED, 100, "SpeedSnapshot", "Speed Value", "Number of Individuals", "plots/speed/SpeedSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.SIGHT, 100, "SightSnapshot", "Sight Value", "Number of Individuals", "plots/sight/SightSnapshot"+step+".png");
+            createGeneSnapshot(GenomCode.CAMOUFLAGE, 100, "CamouflageSnapshot", "Camouflage Value", "Number of Individuals", "plots/camouflage/CamouflageSnapshot"+step+".png");
         }
 
     }
@@ -143,8 +146,8 @@ public class SimulationEngine implements Runnable{
     }
 
     public void ploLineartData() {
-        simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "plots/animal_number"+step+".png");
-        simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "plots/food_on_map"+step+".png");
+        simulationTracker.plot("animal_number", "Number of Animals", "Step", "Number of Animals", "plots/animal_number/animal_number"+step+".png");
+        simulationTracker.plot("food_on_map", "Total food on map", "Step", "Total food on map", "plots/food_on_map/food_on_map"+step+".png");
     }
 
     public void start(){
